@@ -28,7 +28,10 @@ def numerical_gradient(f, p, h = 1e-6):
     return grad
 
 def gradient_descent(grad, x0, step, max_iter=10000, tol=1e-8):
+    """Gradient descent optimization algorithm."""
+
     history = [np.asarray(x0, dtype=float)]
+
     for i in range(max_iter):
         g = grad(history[-1])
         if np.linalg.norm(g) < tol:
@@ -36,3 +39,21 @@ def gradient_descent(grad, x0, step, max_iter=10000, tol=1e-8):
         x_new = history[-1] - step * g
         history.append(x_new)
     return history[-1], np.array(history)
+
+def momentum(grad, x0, step, beta, max_iter=10000, tol=1e-8):
+    """Momentum optimization algorithm."""
+
+    history = [np.asarray(x0, dtype=float)]
+    
+    for i in range(max_iter):
+        g = grad(history[-1])
+        if np.linalg.norm(g) < tol:
+            break
+        m = 0
+        if len(history) > 1:
+            m = beta * (history[-1] - history[-2])
+        
+        x_new = history[-1] - step * g + m
+        history.append(x_new)
+    return history[-1], np.array(history)
+
