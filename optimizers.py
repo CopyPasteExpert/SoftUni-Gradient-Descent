@@ -57,3 +57,21 @@ def momentum(grad, x0, step, beta, max_iter=10000, tol=1e-8):
         history.append(x_new)
     return history[-1], np.array(history)
 
+def quadratic_hess(p, kappa):
+    """Hessian of the bowl ½(x² + κy²) at point p."""
+
+    return np.array([[1.0, 0.0], [0.0, kappa]])
+
+def newton_method(grad, hess, x0, max_iter=10000, tol=1e-8):
+    """Newton's method optimization algorithm."""
+
+    history = [np.asarray(x0, dtype=float)]
+    
+    for i in range(max_iter):
+        g = grad(history[-1])
+        if np.linalg.norm(g) < tol:
+            break
+        H = hess(history[-1])
+        x_new = history[-1] - np.linalg.solve(H, g)
+        history.append(x_new)
+    return history[-1], np.array(history)
