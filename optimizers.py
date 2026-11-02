@@ -26,3 +26,13 @@ def numerical_gradient(f, p, h = 1e-6):
         p_minus_h[i] -= h
         grad[i] = (f(p_plus_h) - f(p_minus_h)) / (2 * h)
     return grad
+
+def gradient_descent(grad, x0, step, max_iter=10000, tol=1e-8):
+    history = [np.asarray(x0, dtype=float)]
+    for i in range(max_iter):
+        g = grad(history[-1])
+        if np.linalg.norm(g) < tol:
+            break
+        x_new = history[-1] - step * g
+        history.append(x_new)
+    return history[-1], np.array(history)
